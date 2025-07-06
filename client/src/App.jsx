@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import { Layout } from 'lucide-react'
 import { RouteIndex } from './helpers/routeName'
 import Index from './Pages/Index'
+import Layout from './layout/Layout'
 
 function App() {
   return (

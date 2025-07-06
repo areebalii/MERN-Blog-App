@@ -10,8 +10,10 @@ function Layout() {
     <SidebarProvider>
     <TopBar />
       <AppSideBar />
-      <main>
+      <main className='w-full'>
+      <div className='w-full min-h-[calc(100vh-35px)]'>
         <Outlet />
+      </div>
         <Footer />
       </main>
     </SidebarProvider>
