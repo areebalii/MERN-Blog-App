@@ -61,7 +61,7 @@ const SignIn = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your Password" {...field} />
+                      <Input type="password" placeholder="Enter your Password" {...field} />
                     </FormControl>
 
                     <FormMessage />
