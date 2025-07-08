@@ -56,7 +56,7 @@ export default function SignUp() {
       const res = await fetch(`${getEnv("VITE_API_BASE_URL")}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        // credentials: "include",
         body: JSON.stringify(values),
       });
 

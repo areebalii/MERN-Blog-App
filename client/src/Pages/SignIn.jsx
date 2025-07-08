@@ -6,15 +6,18 @@ import React from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Card } from '@/components/ui/card'
-import { Link } from 'react-router-dom'
-import { RouteSignUp } from '@/helpers/routeName'
+import { Link, useNavigate } from 'react-router-dom'
+import { RouteIndex, RouteSignUp } from '@/helpers/routeName'
+import { getEnv } from '@/helpers/getEnv'
+import { showToast } from '@/helpers/showToste'
 
 
 const SignIn = () => {
+const Navigate = useNavigate();
 
   const formSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
+    password: z.string().min(3, "Password field is required"),
   })
 
   const form = useForm({
@@ -25,9 +28,28 @@ const SignIn = () => {
     },
   })
 
-  function onSubmit(values) {
-    console.log(values)
-  }
+const onSubmit = async (values) => {
+    try {
+      const res = await fetch(`${getEnv("VITE_API_BASE_URL")}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(values),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        return showToast("error", data.message);
+      }
+
+      showToast("success", data.message);
+      Navigate(RouteIndex);
+    } catch (err) {
+      showToast("error", err.message);
+    }
+  };
+
 
 
   return (

@@ -32,13 +32,13 @@ export const login = async (req, res, next) => {
     const { email, password } = req.body
     const user = await User.findOne({ email })
     if (!user) {
-      next(handleError(400, "Invalid email or password"))
+      return next(handleError(400, "Invalid email or password"))
     }
 
     const hashedPassword = user.password
-    const comparePassword = bcryptjs.compare(password, hashedPassword)
+    const comparePassword = await bcryptjs.compare(password, hashedPassword)
     if (!comparePassword) {
-      next(handleError(400, "Invalid email or password"))
+      return next(handleError(400, "Invalid email or password"))
     }
 
     const token = jwt.sign({
@@ -54,6 +54,9 @@ export const login = async (req, res, next) => {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       path: "/",
     })
+
+    const newUser = user.toObject({ getters: true })
+    delete newUser.password
 
     res.status(200).json({
       success: true,
