@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { RouteSignIn } from "@/helpers/routeName";
 import { showToast } from "@/helpers/showToste";
 import { getEnv } from "@/helpers/getEnv";
+import GoogleLogin from "@/components/GoogleLogin";
 
 
 /* ------------ schema ----------- */
@@ -79,6 +80,16 @@ export default function SignUp() {
         <h1 className="text-2xl font-bold text-center mb-5">
           Create Your Account
         </h1>
+        <div>
+          <GoogleLogin />
+
+          <div className="flex items-center my-5">
+            <hr className="flex-grow border-gray-300" />
+            <span className="mx-2 text-gray-500">or</span>
+            <hr className="flex-grow border-gray-300" />
+          </div>
+        </div>
+
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

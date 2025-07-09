@@ -67,3 +67,47 @@ export const login = async (req, res, next) => {
     next(handleError(500, error.message))
   }
 }
+
+// Google login
+export const googleLogin = async (req, res, next) => {
+  try {
+    const { name, email, avatar } = req.body
+    let user
+    user = await User.findOne({ email })
+    if (!user) {
+      // create new User
+      const password = Math.random().toString()
+      const hashPassword = bcryptjs.hashSync(password)
+      const newUser = new User({
+        name, email, password: hashPassword, avatar
+      })
+      user = await newUser.save()
+    }
+
+
+    const token = jwt.sign({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+    }, process.env.JWT_SECRET)
+
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      path: "/",
+    })
+
+    const newUser = user.toObject({ getters: true })
+    delete newUser.password
+
+    res.status(200).json({
+      success: true,
+      message: "login successfully"
+    })
+
+  } catch (error) {
+    next(handleError(500, error.message))
+  }
+}
